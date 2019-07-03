@@ -1,28 +1,41 @@
+var request = require("request");
 var http = require("http");
-var path=require('path'),
-    url=require('url');
+var path=require('path');
+var details;
 
-http.createServer( function(req, res1){
-    var endpoint=path.basename(req.url); 
-
-    if (endpoint) {
-        const request = require('request');
-        request('https://api-explorer.decent.ch/api/v1/assets/ALX', { json: true }, (err, res2, body) => {
+function initialize() {
+    // Setting URL for request
+    var api = 'https://api-explorer.decent.ch/api/v1/assets/ALX';
+    // Return new promise 
+    return new Promise(function(resolve, reject) {
+    	// Do async job
+        request(api, { json: true }, (err, res, body) => {
             if (err) {
-                return console.log(err); 
+                reject(err); 
+            }else{
+                resolve(body.res.currentSupply);
             }
-            console.log(body.res.currentSupply);
-            //res.writeHead(200, {'Content-Type': 'text/html'});
-            res1.write(body.res.currentSupply);      
         });
-        
+    })
 
-    } else {
-        res1.writeHead(200, {'Content-Type': 'text/html'});  
-        res1.write('Hello world!');     
-    }
-    res1.end();
+}
+
+http.createServer( function(req, res){
+    var endpoint=path.basename(req.url); 
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    var initializePromise = initialize();
+    if(endpoint == 'data'){
+        initializePromise.then(function(result) {
+            details = result;
+            //print data
+            console.log(details);
+            res.write(details);
+            res.end();
+        }, function(err) {
+            console.log(err);
+        }); 
+    }else{
+        res.end('Hello world!');
+    }   
     
 }).listen(8080);
-
-console.log("Static file server running at\n  => http://localhost:8080" );
