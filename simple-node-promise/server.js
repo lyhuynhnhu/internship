@@ -1,9 +1,9 @@
-var http = require("http");
+var http = require("http")
 
-var { requestHandlers } = require("./handlers");
+const { requestHandlers } = require("./handlers")
 
 http.createServer((req, res) => {
-    const url = req.url;
+    const url = req.url
 
     if (url === "/") {
         requestHandlers.welcome(res)
@@ -14,3 +14,5 @@ http.createServer((req, res) => {
     }
 
 }).listen(3000)
+
+console.log('running at http://localhost:3000/')

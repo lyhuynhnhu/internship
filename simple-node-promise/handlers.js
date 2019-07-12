@@ -1,8 +1,9 @@
 const { getDecentCurrentlySupply } = require("./decent/assets")
 
-const requestHandlers = {
+var requestHandlers = {
     welcome: (res) => {
-        res.write("welcome")
+        res.write('welcome to Alax')
+        res.end()
     },
     getData: (res) => {
         getDecentCurrentlySupply()
@@ -12,7 +13,8 @@ const requestHandlers = {
             })
     },
     handle404: (res) => {
-        res.write("Not support yet")        
+        res.write("Not support yet")
+        res.end()      
     }
 }
 
