@@ -5,7 +5,7 @@ function getDecentCurrentlySupply() {
 
   return makePromiseRequest(url)
     .then(data => data.res.currentSupply)
-    .catch(console.log);
+    .catch(err => console.log(err));
 }
 
 module.exports = {
